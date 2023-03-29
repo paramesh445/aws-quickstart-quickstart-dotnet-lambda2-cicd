@@ -32,6 +32,28 @@ Resources:
           Properties:
             Path: /favicon.ico
             Method: get
+ Resources:
+  ServerlessExampleFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./src/ServerlessExample/
+      Handler: ServerlessExample::ServerlessExample.Function::FunctionHandler
+      Runtime: dotnetcore3.1
+      MemorySize: 256
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          PARAM1: VALUE
+      Events:
+        ServerlessExample:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+        Favicon:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /favicon.ico
+            Method: get
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
@@ -45,3 +67,13 @@ Outputs:
   ServerlessExampleFunctionIamRole:
     Description: "Implicit IAM Role created for Serverless Example function"
     Value: !GetAtt ServerlessExampleFunctionRole.Arn
+   ServerlessExampleApi:
+    Description: "API Gateway endpoint URL for Prod stage forvServerless Example function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod1/hello/"
+  ServerlessExampleFunction:
+    Description: "Serverless Example Lambda Function ARN"
+    Value: !GetAtt ServerlessExampleFunction.Arn
+  ServerlessExampleFunctionIamRole:
+    Description: "Implicit IAM Role created for Serverless Example function"
+    Value: !GetAtt ServerlessExampleFunctionRole.Arn
+
